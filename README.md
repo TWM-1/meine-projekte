@@ -18,3 +18,7 @@ Hier sammle ich kleine Projekte und lerne, wie man Code versioniert und Pull Req
 1. Repository klonen
 2. Änderungen vornehmen
 3. Pull Request erstellen
+
+## Lizenz
+
+Dieses Projekt ist unter der [MIT-Lizenz](LICENSE) veröffentlicht.
