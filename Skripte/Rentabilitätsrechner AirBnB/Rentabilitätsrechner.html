@@ -1181,7 +1181,9 @@ function berechnen() {
   const leerstandsRuecklage = bruttoEinnahmen * leerstandPct;
 
   const fixKosten = grundsteuer + versicherung + energie + wasser + hoa + internet;
-  const varKosten = reinigungskosten + instandhaltung + verwaltungskosten + leerstandsRuecklage + plattformGebuehr;
+  // Hinweis: plattformGebuehr ist bereits in nettoEinnahmen abgezogen und darf hier
+  // NICHT erneut als Kostenposten auftauchen (sonst doppelter Abzug der Provision).
+  const varKosten = reinigungskosten + instandhaltung + verwaltungskosten + leerstandsRuecklage;
 
   // Steuerberechnung Quellland
   const zinsanteilJahr1 = darlehen * zinssatz;
