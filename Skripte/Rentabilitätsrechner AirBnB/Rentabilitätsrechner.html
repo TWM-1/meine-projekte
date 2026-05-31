@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferienimmobilien Rentabilitätsrechner – Skandinavien</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #2d4a3e;
+    --birch: #f5f0e8;
+    --snow: #fafaf8;
+    --fjord: #4a7c8e;
+    --midnight: #1a2533;
+    --amber: #c9883a;
+    --moss: #7a9e7e;
+    --sand: #e8dfc8;
+    --text: #2a2a2a;
+    --muted: #7a7a6e;
+    --positive: #3d7a5a;
+    --negative: #9e3d3d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--snow);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--pine);
+    padding: 32px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 1.5;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.07);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .card-header {
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-icon {
+    width: 20px; height: 20px;
+    color: var(--fjord);
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--midnight);
+    font-weight: 700;
+  }
+
+  .card-body {
+    padding: 20px 24px;
+  }
+
+  .field-group {
+    margin-bottom: 16px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .currency-badge {
+    position: absolute;
+    left: 12px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    pointer-events: none;
+    font-weight: 500;
+  }
+
+  input[type=number], input[type=text], select {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 7px;
+    font-size: 0.92rem;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--snow);
+    color: var(--text);
+    transition: border-color 0.15s;
+    -moz-appearance: textfield;
+  }
+
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  input.no-prefix { padding-left: 12px; }
+  select.no-prefix { padding-left: 12px; }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--fjord);
+    box-shadow: 0 0 0 3px rgba(74,124,142,0.1);
+  }
+
+  .hint {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .calc-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--pine);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    margin-top: 8px;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .calc-btn:hover { background: #3d6355; transform: translateY(-1px); }
+  .calc-btn:active { transform: translateY(0); }
+
+  .results-section {
+    grid-column: 1 / -1;
+    display: none;
+  }
+
+  .results-section.visible { display: block; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 800px) {
+    .results-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .kpi {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.07);
+    padding: 20px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .kpi-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .kpi.positive .kpi-value { color: var(--positive); }
+  .kpi.negative .kpi-value { color: var(--negative); }
+  .kpi.neutral .kpi-value { color: var(--fjord); }
+
+  .breakdown-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+
+  @media (max-width: 650px) {
+    .breakdown-grid { grid-template-columns: 1fr; }
+  }
+
+  .bk-col {
+    padding: 20px 22px;
+    border-right: 1px solid rgba(0,0,0,0.06);
+  }
+  .bk-col:last-child { border-right: none; }
+
+  .bk-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--midnight);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--sand);
+  }
+
+  .bk-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 9px;
+    font-size: 0.83rem;
+  }
+
+  .bk-item { color: var(--text); }
+  .bk-val { color: var(--muted); font-weight: 500; white-space: nowrap; }
+
+  .bk-total {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 0.87rem;
+  }
+
+  .bk-total .bk-val { color: var(--midnight); }
+
+  .amortization-section { margin-top: 20px; }
+
+  .amort-header {
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .amort-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  .amort-table th {
+    padding: 10px 16px;
+    text-align: right;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--snow);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .amort-table th:first-child { text-align: left; }
+
+  .amort-table td {
+    padding: 9px 16px;
+    text-align: right;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    color: var(--text);
+  }
+
+  .amort-table td:first-child { text-align: left; color: var(--muted); font-weight: 500; }
+
+  .amort-table tr:hover td { background: var(--birch); }
+
+  .td-pos { color: var(--positive); font-weight: 500; }
+  .td-neg { color: var(--negative); font-weight: 500; }
+
+  .info-banner {
+    margin-top: 24px;
+    background: #f0f6f3;
+    border-left: 3px solid var(--moss);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .country-flag { font-size: 1.1rem; margin-right: 4px; }
+
+  .section-divider {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 0 6px;
+    border-bottom: 1px solid var(--sand);
+    margin-bottom: 14px;
+  }
+
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7a6e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .tag-green { background: #e2f0e8; color: var(--positive); }
+  .tag-red { background: #f0e2e2; color: var(--negative); }
+  .tag-blue { background: #e2edf0; color: var(--fjord); }
+
+  .chart-bar-wrap {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .bar-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.76rem;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .bar-track {
+    height: 7px;
+    background: var(--sand);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .bar-income { background: var(--positive); }
+  .bar-cost { background: var(--fjord); }
+  .bar-net { background: var(--amber); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-row">
+      <svg class="logo-icon" viewBox="0 0 38 38">
+        <path d="M5 30 L19 8 L33 30 Z" />
+        <path d="M11 30 L11 22 L16 22 L16 30" />
+        <path d="M22 30 L22 19 L30 19 L30 30" />
+        <line x1="2" y1="30" x2="36" y2="30" />
+        <circle cx="19" cy="6" r="2.5" fill="#c9883a" stroke="none"/>
+      </svg>
+      <h1>Nordisk Immobilien Kalkulator</h1>
+    </div>
+    <div class="subtitle">Rentabilitätsrechner für Ferienimmobilien · Skandinavien</div>
+  </div>
+</header>
+
+<div class="main">
+  <div class="grid">
+
+    <!-- KAUFPREIS & FINANZIERUNG -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="card-title">Kaufpreis &amp; Finanzierung</span>
+      </div>
+      <div class="card-body">
+        <div class="section-divider">Land &amp; Immobilie</div>
+        <div class="field-group">
+          <label>Land</label>
+          <select id="country" class="no-prefix" onchange="updateCountryDefaults()">
+            <option value="NO">🇳🇴 Norwegen</option>
+            <option value="SE">🇸🇪 Schweden</option>
+            <option value="FI">🇫🇮 Finnland</option>
+          </select>
+        </div>
+
+        <!-- WECHSELKURS -->
+        <div class="field-group" id="fx-group">
+          <label>Wechselkurs <span id="fx-pair">NOK/EUR</span>
+            <span id="fx-live-badge" style="display:none;margin-left:6px;background:#e2f0e8;color:var(--positive);font-size:0.65rem;padding:1px 7px;border-radius:10px;font-weight:600;letter-spacing:0.05em">LIVE</span>
+            <span id="fx-manual-badge" style="display:none;margin-left:6px;background:#f5f0e8;color:var(--amber);font-size:0.65rem;padding:1px 7px;border-radius:10px;font-weight:600;letter-spacing:0.05em">MANUELL</span>
+          </label>
+          <div class="row2">
+            <div class="input-wrap">
+              <span class="currency-badge">1</span>
+              <input type="number" id="fx-rate" value="0.0870" step="0.0001" min="0.0001" oninput="onFxManual()" style="font-weight:600">
+            </div>
+            <button onclick="fetchLiveRate()" id="fx-btn" style="padding:10px 12px;background:var(--fjord);color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;font-weight:500;white-space:nowrap">🔄 Live-Kurs laden</button>
+          </div>
+          <div id="fx-status" class="hint" style="margin-top:5px">Kurs manuell eingetragen – oder Live-Kurs laden</div>
+        </div>
+
+        <div class="field-group">
+          <label>Kaufpreis</label>
+          <div class="input-wrap">
+            <span class="currency-badge" id="currency-badge">NOK</span>
+            <input type="number" id="kaufpreis" value="3500000" min="0" oninput="updateEurConversions()">
+          </div>
+          <div id="kaufpreis-eur" class="hint" style="color:var(--fjord);font-weight:500"></div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Eigenkapital (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="eigenkapital" value="30" min="0" max="100">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Zinssatz (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="zinssatz" value="5.5" step="0.1" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Laufzeit (Jahre)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">#</span>
+              <input type="number" id="laufzeit" value="25" min="1" max="40">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Wertentwicklung (%/J.)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="wertsteigerung" value="2.0" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider" style="margin-top:8px">Kaufnebenkosten</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Grunderwerbsteuer (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="grunderwerbsteuer" value="2.5" step="0.1" min="0">
+            </div>
+            <div class="hint" id="hint-tax">Dokumentavgift NO ≈ 2,5 %</div>
+          </div>
+          <div class="field-group">
+            <label>Notar &amp; Makler</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb2">NOK</span>
+              <input type="number" id="notarkosten" value="40000" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Renovierung</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb3">NOK</span>
+              <input type="number" id="renovierung" value="150000" min="0">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Möblierung</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb4">NOK</span>
+              <input type="number" id="moeblierung" value="80000" min="0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EINNAHMEN -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+        </svg>
+        <span class="card-title">Mieteinnahmen</span>
+      </div>
+      <div class="card-body">
+        <div class="section-divider">Hochsaison (Sommer / Winter)</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Preis/Woche (Hochsaison)</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb5">NOK</span>
+              <input type="number" id="preis-hoch" value="18000" min="0">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Wochen Hochsaison</label>
+            <div class="input-wrap">
+              <span class="currency-badge">#</span>
+              <input type="number" id="wochen-hoch" value="14" min="0" max="52">
+            </div>
+          </div>
+        </div>
+        <div class="section-divider">Nebensaison</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Preis/Woche (Nebensaison)</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb6">NOK</span>
+              <input type="number" id="preis-neben" value="9000" min="0">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Wochen Nebensaison</label>
+            <div class="input-wrap">
+              <span class="currency-badge">#</span>
+              <input type="number" id="wochen-neben" value="16" min="0" max="52">
+            </div>
+          </div>
+        </div>
+        <div class="section-divider">Belegung &amp; Plattform</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Belegungsquote (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="belegung" value="75" min="0" max="100">
+            </div>
+            <div class="hint">Realistisch: 65–85 %</div>
+          </div>
+          <div class="field-group">
+            <label>Plattformprovision (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="provision" value="15" min="0" max="50">
+            </div>
+            <div class="hint">Airbnb ≈ 15 %, Booking ≈ 20 %</div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Sonstige Einnahmen/Jahr</label>
+          <div class="input-wrap">
+            <span class="currency-badge" id="cb7">NOK</span>
+            <input type="number" id="sonstige-einnahmen" value="5000" min="0">
+          </div>
+          <div class="hint">Extras: Sauna, Boot, Fahrräder etc.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BETRIEBSKOSTEN -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span class="card-title">Jährliche Betriebskosten</span>
+      </div>
+      <div class="card-body">
+        <div class="section-divider">Fixkosten</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Grundsteuer / Jahr</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb8">NOK</span>
+              <input type="number" id="grundsteuer" value="8000" min="0">
+            </div>
+            <div class="hint" id="hint-grundsteuer">NO: Kommunalskatt</div>
+          </div>
+          <div class="field-group">
+            <label>Gebäudeversicherung</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb9">NOK</span>
+              <input type="number" id="versicherung" value="12000" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Strom &amp; Heizung</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb10">NOK</span>
+              <input type="number" id="energie" value="18000" min="0">
+            </div>
+            <div class="hint">Skandinavien: Fernwärme üblich</div>
+          </div>
+          <div class="field-group">
+            <label>Wasser &amp; Abwasser</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb11">NOK</span>
+              <input type="number" id="wasser" value="6000" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Gemeinschaftskosten / HOA</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb12">NOK</span>
+              <input type="number" id="hoa" value="10000" min="0">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Internet &amp; TV</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb13">NOK</span>
+              <input type="number" id="internet" value="5000" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="section-divider" style="margin-top:6px">Variable Kosten</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Reinigung/Wechsel</label>
+            <div class="input-wrap">
+              <span class="currency-badge" id="cb14">NOK</span>
+              <input type="number" id="reinigung" value="1500" min="0">
+            </div>
+            <div class="hint">Pro Gästewechsel</div>
+          </div>
+          <div class="field-group">
+            <label>Instandhaltung / Jahr</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="instandhaltung" value="1.0" step="0.1" min="0">
+            </div>
+            <div class="hint">% des Kaufpreises</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Hausverwaltung / Jahr</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="verwaltung" value="10" step="0.5" min="0">
+            </div>
+            <div class="hint">% der Mieteinnahmen</div>
+          </div>
+          <div class="field-group">
+            <label>Steuer auf Mieteinnahmen</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="mietsteuer" value="22" step="1" min="0">
+            </div>
+            <div class="hint" id="hint-mietsteuer">NO: 22 % Kapitalertragsteuer</div>
+          </div>
+        </div>
+
+        <div class="section-divider" style="margin-top:6px">🇩🇪 Doppelbesteuerung (DBA Deutschland)</div>
+        <div class="field-group">
+          <div id="dba-info-box" style="background:#f0f4f8;border-left:3px solid var(--fjord);border-radius:6px;padding:10px 14px;font-size:0.78rem;color:var(--muted);line-height:1.6;margin-bottom:12px;"></div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Dt. Einkommensteuersatz (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="de-einkommensteuer" value="42" step="1" min="0" max="45">
+            </div>
+            <div class="hint">Grenzsteuersatz (25–45 %)</div>
+          </div>
+          <div class="field-group">
+            <label>Solidaritätszuschlag</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="de-soli" value="0" step="0.1" min="0">
+            </div>
+            <div class="hint">Seit 2021 meist 0 % (Ausnahmen)</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Kirchensteuer (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="de-kirchensteuer" value="0" step="0.5" min="0" max="9">
+            </div>
+            <div class="hint">8–9 % auf ESt (optional)</div>
+          </div>
+          <div class="field-group">
+            <label>Progressionsvorbehalt</label>
+            <div class="input-wrap" style="padding-top:4px">
+              <input type="checkbox" id="de-progression" style="width:auto;padding:0;margin-right:8px" checked>
+              <label for="de-progression" style="text-transform:none;letter-spacing:0;font-size:0.82rem;color:var(--text);margin:0">Aktiviert (erhöht dt. Steuersatz)</label>
+            </div>
+            <div class="hint">Auslandseinnahmen erhöhen dt. Steuersatz</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYSE PARAMETER -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <span class="card-title">Analyse &amp; Berechnung</span>
+      </div>
+      <div class="card-body">
+        <div class="section-divider">Finanzielle Kennzahlen</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Analysezeitraum (Jahre)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">#</span>
+              <input type="number" id="analysejahre" value="10" min="1" max="30">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Mietpreissteigerung (%/J.)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="mietsteigerung" value="2.0" step="0.1">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Kostensteigerung (%/J.)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="kostensteigerung" value="3.0" step="0.1">
+            </div>
+            <div class="hint">Inflation Skandinavien ≈ 3 %</div>
+          </div>
+          <div class="field-group">
+            <label>Diskontierungsrate (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="diskont" value="7.0" step="0.1" min="0">
+            </div>
+            <div class="hint">Für NPV-Berechnung</div>
+          </div>
+        </div>
+        <div class="section-divider" style="margin-top:6px">Sonstiges</div>
+        <div class="row2">
+          <div class="field-group">
+            <label>Leerstandsrücklage (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="leerstand" value="5" min="0" max="30">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Kapitalbindungskosten (%)</label>
+            <div class="input-wrap">
+              <span class="currency-badge">%</span>
+              <input type="number" id="opportunitykosten" value="4.0" step="0.1">
+            </div>
+            <div class="hint">Alternativrendite Eigenkapital</div>
+          </div>
+        </div>
+
+        <button class="calc-btn" onclick="berechnen()">📊 Rentabilität berechnen</button>
+      </div>
+    </div>
+
+    <!-- ERGEBNISSE -->
+    <div class="results-section" id="results">
+
+      <div class="results-grid" id="kpis"></div>
+
+      <!-- EUR Umrechnungsleiste -->
+      <div id="eur-bar" style="display:none;background:var(--midnight);color:#fff;border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:20px;align-items:center">
+        <span style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;flex-basis:100%">💶 Euro-Umrechnung (1 <span id="eur-cur-label">NOK</span> = <span id="eur-rate-label">–</span> €)</span>
+        <div id="eur-items" style="display:flex;flex-wrap:wrap;gap:24px"></div>
+      </div>
+
+      <div class="breakdown-card">
+        <div class="card-header amort-header">
+          <svg class="card-icon" style="color:var(--pine)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+          </svg>
+          <span class="card-title">Detaillierte Kostenübersicht (Jahr 1)</span>
+        </div>
+        <div class="breakdown-grid" id="breakdown"></div>
+      </div>
+
+      <div class="amortization-section">
+        <div class="breakdown-card">
+          <div class="card-header amort-header">
+            <svg class="card-icon" style="color:var(--pine)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+            </svg>
+            <span class="card-title">Jahresübersicht &amp; Cashflow-Prognose</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="amort-table" id="amort-table"></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-banner" id="steuer-info"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const CURRENCY = { NO: 'NOK', SE: 'SEK', FI: 'EUR' };
+const TAX_RATES = { NO: 22, SE: 30, FI: 30 };
+const TRANSFER_HINTS = {
+  NO: 'Dokumentavgift NO ≈ 2,5 %',
+  SE: 'Stämpelskatt SE ≈ 4,25 % (juristische Person)',
+  FI: 'Varainsiirtovero FI ≈ 4 %'
+};
+const TRANSFER_DEFAULTS = { NO: 2.5, SE: 4.25, FI: 4.0 };
+const MIET_HINTS = {
+  NO: 'NO: 22 % Kapitalertragsteuer (Kapitalinntekt)',
+  SE: 'SE: 30 % auf Gewinn (nach Schablonavdrag)',
+  FI: 'FI: 30 % (über 30.000 €: 34 %)'
+};
+const GRUNDST_HINTS = {
+  NO: 'NO: Kommunalskatt (variiert je Gemeinde)',
+  SE: 'SE: Fastighetsavgift (max 9.287 SEK/Jahr)',
+  FI: 'FI: Kiinteistövero ≈ 0,5–2 % des Einheitswertes'
+};
+
+// Doppelbesteuerungsabkommen Deutschland ↔ Skandinavien
+const DBA = {
+  NO: {
+    name: 'Norwegen',
+    abkommen: 'DBA Deutschland–Norwegen (1991)',
+    methode: 'Freistellungsmethode mit Progressionsvorbehalt',
+    methodenCode: 'freistellung',
+    mieteinnahmen: 'Besteuerungsrecht liegt bei Norwegen (Belegenheitsprinzip, Art. 6). Deutschland stellt frei, rechnet aber für Progressionsvorbehalt an.',
+    kapitalgewinne: 'Veräußerungsgewinne: Norwegen hat Besteuerungsrecht (Art. 13). Freistellung in DE mit Progressionsvorbehalt.',
+    besonderheiten: [
+      'Mieteinnahmen werden in NO mit 22 % versteuert',
+      'In DE steuerfrei, erhöhen aber den dt. Steuersatz (Progressionsvorbehalt)',
+      'Keine Anrechnung der norw. Steuer auf dt. Steuer (Freistellung)',
+      'Verluste aus NO können dt. Einkommen NICHT mindern',
+      'Norwegen ist kein EU-Mitglied → keine EU-Beihilfen',
+      'Meldepflicht in DE: Anlage AUS in der Einkommensteuererklärung',
+    ],
+    wechselkursRisiko: 'NOK/EUR – NOK kann stark schwanken (Ölpreisabhängigkeit)',
+  },
+  SE: {
+    name: 'Schweden',
+    abkommen: 'DBA Deutschland–Schweden (1992)',
+    methode: 'Freistellungsmethode mit Progressionsvorbehalt',
+    methodenCode: 'freistellung',
+    mieteinnahmen: 'Besteuerungsrecht bei Schweden (Art. 6). DE stellt frei, Progressionsvorbehalt gilt.',
+    kapitalgewinne: 'Veräußerungsgewinne: Schweden hat Besteuerungsrecht. Freistellung in DE mit Progressionsvorbehalt.',
+    besonderheiten: [
+      'Mieteinnahmen in SE: 30 % auf Gewinn nach Schablonavdrag (Pauschalabzug 40 %)',
+      'In DE steuerfrei, erhöhen aber den dt. Steuersatz (Progressionsvorbehalt)',
+      'EU-Mitglied: Vorteile bei grenzüberschreitender Sachverhaltsgestaltung',
+      'Verluste aus SE können dt. Einkommen NICHT mindern',
+      'Meldepflicht in DE: Anlage AUS in der Einkommensteuererklärung',
+      'Ggf. Registrierungspflicht als Vermieter beim schwed. Skatteverket',
+    ],
+    wechselkursRisiko: 'SEK/EUR – moderates Wechselkursrisiko',
+  },
+  FI: {
+    name: 'Finnland',
+    abkommen: 'DBA Deutschland–Finnland (1979, rev. 2017)',
+    methode: 'Anrechnungsmethode',
+    methodenCode: 'anrechnung',
+    mieteinnahmen: 'Besteuerungsrecht bei Finnland (Art. 6). DE rechnet finn. Steuer auf dt. Steuerschuld an (Art. 23 Abs. 1 lit. b).',
+    kapitalgewinne: 'Veräußerungsgewinne: Finnland hat Besteuerungsrecht. DE rechnet Steuer an.',
+    besonderheiten: [
+      'Mieteinnahmen in FI: 30 % (über 30.000 €: 34 %) Kapitalertragsteuer',
+      'Finland ist EU-Mitglied und verwendet EUR → kein Währungsrisiko',
+      'Anrechnungsmethode: finn. Steuer wird auf dt. Steuerschuld angerechnet (max. dt. Steuersatz)',
+      'Doppelbesteuerung wird durch Anrechnung vermieden',
+      'In der Praxis: Wenn finn. Steuersatz (30 %) < dt. Steuersatz → Nachzahlung in DE möglich',
+      'Meldepflicht in DE: Anlage AUS in der Einkommensteuererklärung',
+      'Registrierungspflicht beim finn. Verohallinto (Steueramt)',
+    ],
+    wechselkursRisiko: 'Kein Wechselkursrisiko (EUR)',
+  }
+};
+
+// ---- Wechselkurs ----
+const FX_DEFAULTS = { NO: 0.0870, SE: 0.0880, FI: 1.0 };
+let fxLive = false;
+
+function onFxManual() {
+  fxLive = false;
+  document.getElementById('fx-live-badge').style.display = 'none';
+  document.getElementById('fx-manual-badge').style.display = 'inline';
+  document.getElementById('fx-status').textContent = 'Manueller Kurs aktiv';
+  updateEurConversions();
+}
+
+async function fetchLiveRate() {
+  const country = document.getElementById('country').value;
+  if (country === 'FI') {
+    document.getElementById('fx-status').textContent = 'Finnland verwendet EUR – kein Kurs nötig.';
+    return;
+  }
+  const cur = CURRENCY[country];
+  const btn = document.getElementById('fx-btn');
+  btn.textContent = '⏳ Lädt...';
+  btn.disabled = true;
+  try {
+    // Frankfurter App – kostenlos, kein API-Key nötig
+    const res = await fetch(`https://api.frankfurter.app/latest?from=${cur}&to=EUR`);
+    const data = await res.json();
+    const rate = data.rates.EUR;
+    document.getElementById('fx-rate').value = rate.toFixed(6);
+    fxLive = true;
+    document.getElementById('fx-live-badge').style.display = 'inline';
+    document.getElementById('fx-manual-badge').style.display = 'none';
+    const date = data.date;
+    document.getElementById('fx-status').textContent = `Live-Kurs vom ${date}: 1 ${cur} = ${rate.toFixed(5)} EUR`;
+    updateEurConversions();
+  } catch(e) {
+    document.getElementById('fx-status').textContent = '⚠️ Kurs konnte nicht geladen werden – bitte manuell eintragen.';
+    document.getElementById('fx-manual-badge').style.display = 'inline';
+  }
+  btn.textContent = '🔄 Live-Kurs laden';
+  btn.disabled = false;
+}
+
+function getFxRate() {
+  return parseFloat(document.getElementById('fx-rate').value) || 1;
+}
+
+function toEur(amount) {
+  const country = document.getElementById('country').value;
+  if (country === 'FI') return amount;
+  return amount * getFxRate();
+}
+
+function fmtEur(n) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: 0 }) + ' €';
+}
+
+function updateEurConversions() {
+  const country = document.getElementById('country').value;
+  if (country === 'FI') {
+    document.getElementById('kaufpreis-eur').textContent = '';
+    return;
+  }
+  const kp = parseFloat(document.getElementById('kaufpreis').value) || 0;
+  const rate = getFxRate();
+  const eur = kp * rate;
+  document.getElementById('kaufpreis-eur').textContent = `≈ ${fmtEur(eur)}`;
+}
+
+function updateFxGroup(country) {
+  const fxGroup = document.getElementById('fx-group');
+  const fxPair = document.getElementById('fx-pair');
+  const cur = CURRENCY[country];
+  if (country === 'FI') {
+    fxGroup.style.opacity = '0.4';
+    fxGroup.style.pointerEvents = 'none';
+    fxPair.textContent = 'EUR/EUR';
+    document.getElementById('fx-rate').value = '1.0000';
+    document.getElementById('fx-status').textContent = 'Finnland verwendet EUR – kein Umrechnung nötig';
+    document.getElementById('kaufpreis-eur').textContent = '';
+  } else {
+    fxGroup.style.opacity = '1';
+    fxGroup.style.pointerEvents = 'auto';
+    fxPair.textContent = `${cur}/EUR`;
+    document.getElementById('fx-rate').value = FX_DEFAULTS[country];
+    document.getElementById('fx-status').textContent = 'Standardkurs hinterlegt – oder Live-Kurs laden';
+    document.getElementById('fx-live-badge').style.display = 'none';
+    document.getElementById('fx-manual-badge').style.display = 'inline';
+    fxLive = false;
+    updateEurConversions();
+  }
+}
+
+function updateCountryDefaults() {
+  const c = document.getElementById('country').value;
+  const cur = CURRENCY[c];
+  document.getElementById('currency-badge').textContent = cur;
+  ['cb2','cb3','cb4','cb5','cb6','cb7','cb8','cb9','cb10','cb11','cb12','cb13','cb14'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = cur;
+  });
+  document.getElementById('hint-tax').textContent = TRANSFER_HINTS[c];
+  document.getElementById('grunderwerbsteuer').value = TRANSFER_DEFAULTS[c];
+  document.getElementById('mietsteuer').value = TAX_RATES[c];
+  document.getElementById('hint-mietsteuer').textContent = MIET_HINTS[c];
+  document.getElementById('hint-grundsteuer').textContent = GRUNDST_HINTS[c];
+
+  // DBA Info Box aktualisieren
+  const dba = DBA[c];
+  const box = document.getElementById('dba-info-box');
+  box.innerHTML = `
+    <strong style="color:var(--midnight)">${dba.abkommen}</strong><br>
+    <span style="color:var(--fjord);font-weight:600">Methode: ${dba.methode}</span><br><br>
+    <em>Mieteinnahmen:</em> ${dba.mieteinnahmen}<br>
+    <em>Veräußerung:</em> ${dba.kapitalgewinne}<br>
+    <em>Währungsrisiko:</em> ${dba.wechselkursRisiko}
+  `;
+  updateFxGroup(c);
+}
+
+function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+function fmt(n, cur) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: 0 }) + ' ' + cur;
+}
+function fmtP(n) { return n.toFixed(2).replace('.',',') + ' %'; }
+
+function berechnen() {
+  const country = document.getElementById('country').value;
+  const cur = CURRENCY[country];
+
+  const kaufpreis = v('kaufpreis');
+  const ekQuote = v('eigenkapital') / 100;
+  const zinssatz = v('zinssatz') / 100;
+  const laufzeit = v('laufzeit');
+  const wertsteigerung = v('wertsteigerung') / 100;
+  const grunderwerbsteuer = v('grunderwerbsteuer') / 100;
+  const notarkosten = v('notarkosten');
+  const renovierung = v('renovierung');
+  const moeblierung = v('moeblierung');
+
+  const preisHoch = v('preis-hoch');
+  const wochenHoch = v('wochen-hoch');
+  const preisNeben = v('preis-neben');
+  const wochenNeben = v('wochen-neben');
+  const belegung = v('belegung') / 100;
+  const provision = v('provision') / 100;
+  const sonstigeEinn = v('sonstige-einnahmen');
+
+  const grundsteuer = v('grundsteuer');
+  const versicherung = v('versicherung');
+  const energie = v('energie');
+  const wasser = v('wasser');
+  const hoa = v('hoa');
+  const internet = v('internet');
+  const reinigungProWechsel = v('reinigung');
+  const instandhaltungPct = v('instandhaltung') / 100;
+  const verwaltungPct = v('verwaltung') / 100;
+  const mietsteuerPct = v('mietsteuer') / 100;
+
+  const analysejahre = v('analysejahre');
+  const mietsteigerung = v('mietsteigerung') / 100;
+  const kostensteigerung = v('kostensteigerung') / 100;
+  const diskont = v('diskont') / 100;
+  const leerstandPct = v('leerstand') / 100;
+  const opportunityPct = v('opportunitykosten') / 100;
+
+  // DBA / Deutsche Steuer
+  const dba = DBA[country];
+  const deEinkommensteuer = v('de-einkommensteuer') / 100;
+  const deSoli = v('de-soli') / 100;
+  const deKirchensteuer = v('de-kirchensteuer') / 100;
+  const progressionsvorbehalt = document.getElementById('de-progression').checked;
+
+  // --- Investition ---
+  const eigenkapital = kaufpreis * ekQuote;
+  const darlehen = kaufpreis * (1 - ekQuote);
+  const kaufnebenkosten = kaufpreis * grunderwerbsteuer + notarkosten;
+  const gesamtinvestition = kaufpreis + kaufnebenkosten + renovierung + moeblierung;
+
+  // Annuität
+  const monatszins = zinssatz / 12;
+  const monate = laufzeit * 12;
+  let annuitaet = 0;
+  if (darlehen > 0 && zinssatz > 0) {
+    annuitaet = darlehen * (monatszins * Math.pow(1 + monatszins, monate)) / (Math.pow(1 + monatszins, monate) - 1);
+  } else if (darlehen > 0) {
+    annuitaet = darlehen / monate;
+  }
+  const jahresannuitaet = annuitaet * 12;
+
+  // --- Einnahmen Jahr 1 ---
+  const bruttoEinnahmen = (preisHoch * wochenHoch + preisNeben * wochenNeben) * belegung;
+  const plattformGebuehr = bruttoEinnahmen * provision;
+  const nettoEinnahmen = bruttoEinnahmen - plattformGebuehr + sonstigeEinn;
+
+  // --- Kosten Jahr 1 ---
+  const anzahlWechsel = (wochenHoch * belegung) + (wochenNeben * belegung);
+  const reinigungskosten = reinigungProWechsel * anzahlWechsel;
+  const instandhaltung = kaufpreis * instandhaltungPct;
+  const verwaltungskosten = nettoEinnahmen * verwaltungPct;
+  const leerstandsRuecklage = bruttoEinnahmen * leerstandPct;
+
+  const fixKosten = grundsteuer + versicherung + energie + wasser + hoa + internet;
+  const varKosten = reinigungskosten + instandhaltung + verwaltungskosten + leerstandsRuecklage + plattformGebuehr;
+
+  // Steuerberechnung Quellland
+  const zinsanteilJahr1 = darlehen * zinssatz;
+  const steuerBasis = Math.max(0, nettoEinnahmen - fixKosten - varKosten - zinsanteilJahr1);
+  const mietsteuer = steuerBasis * mietsteuerPct;
+
+  // DBA: Deutsche Steuerbelastung
+  let deSteuerZusatz = 0;
+  let deSteuererklarung = '';
+
+  if (dba.methodenCode === 'freistellung') {
+    // Freistellungsmethode: Auslandseinkommen in DE steuerfrei
+    // ABER Progressionsvorbehalt: Auslandseinkommen erhöht den dt. Steuersatz auf inl. Einkommen
+    // Wir berechnen die Mehrbelastung durch Progressionsvorbehalt als Hinweis
+    // (kann nur approximiert werden ohne Kenntnis des Gesamteinkommens)
+    if (progressionsvorbehalt) {
+      // Näherung: Die Auslandseinnahmen werden zum inl. Einkommen hinzugerechnet → 
+      // Der dt. Steuersatz steigt. Wir zeigen dies als informativen Betrag an.
+      const progressionsEffekt = nettoEinnahmen * deEinkommensteuer * 0.15; // ca. 15% Progressionseffekt als Näherung
+      deSteuerZusatz = progressionsEffekt;
+      deSteuererklarung = `Progressionsvorbehalt-Effekt (Näherung ~15% der Auslandseinnahmen × dt. Steuersatz)`;
+    } else {
+      deSteuerZusatz = 0;
+      deSteuererklarung = `Keine zusätzliche dt. Steuer auf Mieteinnahmen (Freistellungsmethode)`;
+    }
+  } else if (dba.methodenCode === 'anrechnung') {
+    // Anrechnungsmethode (Finnland): finn. Steuer wird auf dt. Steuer angerechnet
+    // dt. Steuer auf Auslandseinkommen = steuerBasis × dt. Grenzsteuersatz
+    // Anrechnung: finn. Steuer bis max. dt. Steuer
+    const dtSteuerAufAusland = steuerBasis * deEinkommensteuer * (1 + deSoli + deKirchensteuer);
+    const anrechnungMax = Math.min(mietsteuer, dtSteuerAufAusland);
+    deSteuerZusatz = Math.max(0, dtSteuerAufAusland - anrechnungMax);
+    deSteuererklarung = `Dt. Steuer auf Auslandseinkommen: ${fmt(dtSteuerAufAusland, cur)} − Anrechnung finn. Steuer: ${fmt(anrechnungMax, cur)} = Nachzahlung DE: ${fmt(deSteuerZusatz, cur)}`;
+  }
+
+  const gesamtSteuerbelastung = mietsteuer + deSteuerZusatz;
+
+  const gesamtKostenOhneDienst = fixKosten + varKosten + gesamtSteuerbelastung;
+  const gesamtKostenMitDienst = gesamtKostenOhneDienst + jahresannuitaet;
+
+  const cashflowVorDienst = nettoEinnahmen - gesamtKostenOhneDienst;
+  const cashflowNachDienst = nettoEinnahmen - gesamtKostenMitDienst;
+
+  // --- KPIs ---
+  const bruttoRendite = (nettoEinnahmen / kaufpreis) * 100;
+  const nettoRendite = (cashflowVorDienst / gesamtinvestition) * 100;
+  const eigenkapitalrendite = eigenkapital > 0 ? (cashflowNachDienst / eigenkapital) * 100 : 0;
+  const amortisation = cashflowNachDienst > 0 ? eigenkapital / cashflowNachDienst : Infinity;
+
+  // Opportunity Cost EK
+  const oppCost = eigenkapital * opportunityPct;
+
+  // --- Multi-Jahr Cashflow ---
+  let npv = -gesamtinvestition;
+  let rows = [];
+  let kumulativCF = -gesamtinvestition;
+  let einnahmenJ = nettoEinnahmen;
+  let kostenJ = gesamtKostenOhneDienst;
+  let immowert = kaufpreis;
+  let darlehenRest = darlehen;
+
+  for (let j = 1; j <= analysejahre; j++) {
+    if (j > 1) {
+      einnahmenJ *= (1 + mietsteigerung);
+      kostenJ *= (1 + kostensteigerung);
+    }
+    const zinsen_j = darlehenRest * zinssatz;
+    const tilgung_j = jahresannuitaet - zinsen_j;
+    darlehenRest = Math.max(0, darlehenRest - tilgung_j);
+    const cf_j = einnahmenJ - kostenJ - jahresannuitaet;
+    const discFactor = Math.pow(1 + diskont, j);
+    npv += cf_j / discFactor;
+    kumulativCF += cf_j;
+    immowert *= (1 + wertsteigerung);
+    rows.push({ j, einnahmenJ, kostenJ, jahresannuitaet, cf_j, kumulativCF, immowert, darlehenRest, npv });
+  }
+
+  const endwertimmobilie = immowert;
+  const eigenkapitalEndwert = endwertimmobilie - darlehenRest;
+
+  // EUR Umrechnungsleiste
+  const rate = getFxRate();
+  const eurBar = document.getElementById('eur-bar');
+  if (country !== 'FI') {
+    eurBar.style.display = 'flex';
+    document.getElementById('eur-cur-label').textContent = cur;
+    document.getElementById('eur-rate-label').textContent = rate.toFixed(5);
+    const eurItems = [
+      { label: 'Kaufpreis', val: kaufpreis },
+      { label: 'Gesamtinvestition', val: gesamtinvestition },
+      { label: 'Darlehen', val: darlehen },
+      { label: 'Jahreseinnahmen', val: nettoEinnahmen },
+      { label: 'Cashflow/Jahr', val: cashflowNachDienst },
+      { label: 'Immobilienwert (' + analysejahre + 'J.)', val: endwertimmobilie },
+    ];
+    document.getElementById('eur-items').innerHTML = eurItems.map(item => `
+      <div>
+        <div style="font-size:0.68rem;opacity:0.55;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:2px">${item.label}</div>
+        <div style="font-size:1.05rem;font-family:'Playfair Display',serif;font-weight:700;color:${item.val < 0 ? '#f08080' : '#aee8c0'}">${fmtEur(item.val * rate)}</div>
+      </div>
+    `).join('');
+  } else {
+    eurBar.style.display = 'none';
+  }
+
+  // KPIs
+  const kpiData = [
+    { label: 'Bruttorendite', value: fmtP(bruttoRendite), sub: 'Einnahmen / Kaufpreis', cls: bruttoRendite >= 5 ? 'positive' : bruttoRendite >= 3 ? 'neutral' : 'negative' },
+    { label: 'Nettorendite', value: fmtP(nettoRendite), sub: 'Nach Betriebskosten', cls: nettoRendite >= 3 ? 'positive' : nettoRendite >= 1 ? 'neutral' : 'negative' },
+    { label: 'Cashflow/Jahr', value: fmt(cashflowNachDienst, cur), sub: 'Nach Schuldendienst', cls: cashflowNachDienst >= 0 ? 'positive' : 'negative' },
+    { label: 'EK-Rendite', value: fmtP(eigenkapitalrendite), sub: 'Auf Eigenkapital', cls: eigenkapitalrendite >= 5 ? 'positive' : eigenkapitalrendite >= 0 ? 'neutral' : 'negative' },
+    { label: 'Amortisation', value: isFinite(amortisation) ? amortisation.toFixed(1) + ' J.' : '∞', sub: 'Eigenkapital-Rückfluss', cls: 'neutral' },
+    { label: 'NPV', value: fmt(npv, cur), sub: `${analysejahre}-Jahres Barwert`, cls: npv >= 0 ? 'positive' : 'negative' },
+    { label: 'Immobilienwert', value: fmt(endwertimmobilie, cur), sub: `In ${analysejahre} Jahren`, cls: 'neutral' },
+    { label: 'EK-Endwert', value: fmt(eigenkapitalEndwert, cur), sub: 'Netto nach Kredit', cls: eigenkapitalEndwert > eigenkapital ? 'positive' : 'neutral' },
+  ];
+
+  document.getElementById('kpis').innerHTML = kpiData.map(k =>
+    `<div class="kpi ${k.cls}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`
+  ).join('');
+
+  // Breakdown
+  const einnahmenRows = [
+    ['Hochsaison Brutto', fmt(preisHoch * wochenHoch * belegung, cur)],
+    ['Nebensaison Brutto', fmt(preisNeben * wochenNeben * belegung, cur)],
+    ['Sonstige', fmt(sonstigeEinn, cur)],
+    ['Plattformgebühr', '– ' + fmt(plattformGebuehr, cur)],
+  ];
+  const fixRows = [
+    ['Grundsteuer', fmt(grundsteuer, cur)],
+    ['Versicherung', fmt(versicherung, cur)],
+    ['Energie & Heizung', fmt(energie, cur)],
+    ['Wasser', fmt(wasser, cur)],
+    ['HOA / Gemeinschaft', fmt(hoa, cur)],
+    ['Internet & TV', fmt(internet, cur)],
+  ];
+  const varRows = [
+    ['Reinigung (Wechsel)', fmt(reinigungskosten, cur)],
+    ['Instandhaltung', fmt(instandhaltung, cur)],
+    ['Hausverwaltung', fmt(verwaltungskosten, cur)],
+    ['Leerstandsrücklage', fmt(leerstandsRuecklage, cur)],
+    [`Steuer ${dba.name}`, fmt(mietsteuer, cur)],
+    [`Dt. Steuerzusatz (DBA)`, fmt(deSteuerZusatz, cur)],
+    ['Schuldendienst', fmt(jahresannuitaet, cur)],
+  ];
+
+  function renderBkRows(rows) {
+    return rows.map(r => `<div class="bk-row"><span class="bk-item">${r[0]}</span><span class="bk-val">${r[1]}</span></div>`).join('');
+  }
+
+  document.getElementById('breakdown').innerHTML = `
+    <div class="bk-col">
+      <div class="bk-title">💰 Einnahmen</div>
+      ${renderBkRows(einnahmenRows)}
+      <div class="bk-total"><span>Netto-Einnahmen</span><span class="bk-val">${fmt(nettoEinnahmen, cur)}</span></div>
+    </div>
+    <div class="bk-col">
+      <div class="bk-title">🏠 Fixkosten</div>
+      ${renderBkRows(fixRows)}
+      <div class="bk-total"><span>Gesamt Fix</span><span class="bk-val">${fmt(fixKosten, cur)}</span></div>
+    </div>
+    <div class="bk-col">
+      <div class="bk-title">⚙️ Variable &amp; Dienst</div>
+      ${renderBkRows(varRows)}
+      <div class="bk-total"><span>Cashflow</span><span class="bk-val" style="color:${cashflowNachDienst >= 0 ? 'var(--positive)' : 'var(--negative)'}">${fmt(cashflowNachDienst, cur)}</span></div>
+    </div>
+  `;
+
+  // Amortisationstabelle
+  const table = document.getElementById('amort-table');
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Jahr</th>
+        <th>Einnahmen</th>
+        <th>Betriebsk.</th>
+        <th>Schuldend.</th>
+        <th>Cashflow</th>
+        <th>Kum. CF</th>
+        <th>Immowert</th>
+        <th>NPV</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows.map(r => `
+        <tr>
+          <td>Jahr ${r.j}</td>
+          <td>${fmt(r.einnahmenJ, cur)}</td>
+          <td>${fmt(r.kostenJ, cur)}</td>
+          <td>${fmt(r.jahresannuitaet, cur)}</td>
+          <td class="${r.cf_j >= 0 ? 'td-pos' : 'td-neg'}">${fmt(r.cf_j, cur)}</td>
+          <td class="${r.kumulativCF >= 0 ? 'td-pos' : 'td-neg'}">${fmt(r.kumulativCF, cur)}</td>
+          <td>${fmt(r.immowert, cur)}</td>
+          <td class="${r.npv >= 0 ? 'td-pos' : 'td-neg'}">${fmt(r.npv, cur)}</td>
+        </tr>`).join('')}
+    </tbody>
+  `;
+
+  // DBA Steuerinfo Panel
+  const besonderheitenHtml = dba.besonderheiten.map(b => `<li style="margin-bottom:4px">${b}</li>`).join('');
+  document.getElementById('steuer-info').innerHTML = `
+    <div style="margin-bottom:10px">
+      <strong style="font-size:0.9rem;color:var(--midnight)">📋 DBA-Analyse: ${dba.abkommen}</strong>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
+      <div>
+        <strong>Besteuerungsmethode:</strong> ${dba.methode}<br>
+        <strong>Mieteinnahmen:</strong> ${dba.mieteinnahmen}<br>
+        <strong>Veräußerungsgewinne:</strong> ${dba.kapitalgewinne}
+      </div>
+      <div style="background:#fff;border-radius:6px;padding:10px 14px;border:1px solid rgba(0,0,0,0.08)">
+        <strong>Steuerbelastung Jahr 1 (Näherung):</strong><br>
+        Steuer ${dba.name}: <strong>${fmt(mietsteuer, cur)}</strong><br>
+        Dt. Steuerzusatz: <strong>${fmt(deSteuerZusatz, cur)}</strong><br>
+        <span style="font-size:0.75rem;color:var(--muted)">${deSteuererklarung}</span><br>
+        <strong style="color:var(--midnight)">Gesamt Steuer: ${fmt(gesamtSteuerbelastung, cur)}</strong><br>
+        Effektive Gesamtsteuerquote: <strong>${fmtP(steuerBasis > 0 ? (gesamtSteuerbelastung / steuerBasis * 100) : 0)}</strong>
+      </div>
+    </div>
+    <strong>Wichtige Besonderheiten für deutsche Eigentümer:</strong>
+    <ul style="margin-top:6px;padding-left:18px;line-height:1.7">
+      ${besonderheitenHtml}
+    </ul>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,0.08);font-size:0.75rem">
+      ⚠️ <strong>Haftungsausschluss:</strong> Diese Berechnung ist eine Planungshilfe und ersetzt keine steuerliche oder rechtliche Beratung. Insbesondere der Progressionsvorbehalt und die Anrechnungsobergrenzen hängen von Ihrem Gesamteinkommen ab. Bitte konsultieren Sie einen auf internationales Steuerrecht spezialisierten Steuerberater. Opportunitätskosten Eigenkapital: ${fmt(oppCost, cur)}/Jahr.
+    </div>
+  `;
+
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Init
+updateCountryDefaults();
+</script>
+</body>
+</html>
